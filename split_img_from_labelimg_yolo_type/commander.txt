@@ -1,0 +1,1 @@
+python image_cut_V2.py ["E:\progectlocation\05.haixin_U-tube\03.python_algorithms\haixin_u-tube_algorithms\measureDistance\measureDistance_lengthBiasDetect\weights\haixin-utube-distanceMeasure-bukabian-GPU-1024-20220217.pt"] "E:\02.PhotoData\haixin_U-tube\Laboratory_sampling\20220223\LU" "E:\02.PhotoData\haixin_U-tube\Laboratory_sampling\20220223\lu-split"

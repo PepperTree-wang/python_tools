@@ -1,0 +1,8 @@
+
+python search_file_and_move.py "C:\Users\Admin\Desktop\station_1_20220105\sampling_photo\2022-01-05_test" "C:\Users\Admin\D
+esktop\station_1_20220105\sampling_photo\movetst"
+
+python search_file_and_move.py "E:\02.PhotoData\Jidong\Data\Production_sampling\work_bench_1_2022-01-06\sampling_photo\2022-01-06"  "E:\02.PhotoData\Jidong\Data\Production_sampling\work_bench_1_2022-01-06\sampling_photo\split"
+
+
+
