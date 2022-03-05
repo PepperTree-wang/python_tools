@@ -139,6 +139,3 @@ if __name__ == '__main__':
         # cv2.imwrite(img_return_path + "/" + img_name, small_img)
         save_new_txt(small_labels, result_txt_path)
 
-
-
-# sdfas
