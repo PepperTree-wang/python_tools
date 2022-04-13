@@ -7,6 +7,8 @@ import argparse
 import json
 import os
 import sys
+import time
+
 from pathlib import Path
 
 import cv2
@@ -39,7 +41,7 @@ from utils.torch_utils import select_device, time_sync
 
 
 @torch.no_grad()
-def detect(weights='yolov5s.pt',  # model.pt path(s)
+def detect(weights='E:/progectlocation/01.algorithm/python_tool/split_img_from_labelimg_yolo_type/weights/haixin-utube-distanceMeasure-bukabian-GPU-1024-20220217.pt',  # model.pt path(s)
            images='./test/teaching/',  # file/dir/URL/glob, 0 for webcam
            imgsz=[1024, 1024],  # inference size (pixels)
            conf_thres=0.1,  # confidence threshold
@@ -130,42 +132,63 @@ def get_imgs_path(folder_path):
 
     return path_list
 
+def main():
+    opt = parse_opt()
+    if_production, root, parameters = opt.if_production, opt.root, opt.parameters
+    image_path, result_path = opt.image_path, opt.result_path
+    weights = opt.weights
+
+
+    if not os.path.exists(result_path):
+        os.mkdir(result_path)
+    imgs_path = get_imgs_path(image_path)
+    print(opt)
+    print(imgs_path)
+    for img_path in imgs_path:
+        name_list, pred_images, boxes = detect(weights=weights,images=img_path)
+
+        # float -> int
+        int_boxes = boxes[name_list[0]].astype(int)
+        #  按照x_0坐标位置进行排序
+        int_boxes = int_boxes[np.lexsort(int_boxes[:, ::-1].T)]
+
+        img = cv2.imread(img_path)
+
+        # 遍历坐标进行切图
+        i = len(int_boxes)
+        # # 判断检测数量是否为16个U管腿部或者8个U管顶部
+        # if i != 16 or i != 8:
+        #     print("*"*20)
+        #     print("目标检测异常！")
+        #     print(f"检测到的目标数量为：{i}")
+        #     print("*"*20)
+        for coordinate in int_boxes:
+            x_0, y_0, x_1, y_1 = coordinate[0], coordinate[1], coordinate[2], coordinate[3]
+            img_save_path = result_path + f"//{i}{name_list[0]}"
+            print(img_save_path)
+            cv2.imwrite(img_save_path, img[y_0:y_1, x_0:x_1, :])
+            i -= 1
+
+
+
+
+
+def parse_opt():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--if-production', default=True, action="store_true", help='if production: load json ;'
+                                                                                   'else: load params')
+    parser.add_argument('--root', type=str, default="E:/progectlocation/05.haixin_U-tube/03.python_algorithms/haixin_u-tube_algorithms",
+                        help='root path')
+    parser.add_argument('--parameters', type=str, default="parameters/foldDetection.txt", help='parameters in json')
+    parser.add_argument('--weights', type=str, default="E:/progectlocation/05.haixin_U-tube/03.python_algorithms/haixin_u-tube_algorithms/measureDistance/measureDistance_lengthBiasDetect_v3.1/weights/haixin_length_20220310_1024_yolo5s.pt", help='yolo weights file')
+    parser.add_argument('--image-path', type=str, default="F:\\1.znzz\\2.Hisence-U-Tube\\1.ImageFiles\\Train_data\\20220328_pleats_Yolo5s_det_v4\\big_img", help='path of images')
+    parser.add_argument('--result-path', type=str, default="F:\\1.znzz\\2.Hisence-U-Tube\\1.ImageFiles\\Train_data\\20220328_pleats_Yolo5s_det_v4\\label_img", help='path of result images')
+    opt = parser.parse_args()
+    return opt
+
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("参数不足！请使用以下参数：python程序名称；权重文件路径；待裁剪图片路径；输出图片路径")
-    else:
-        # result_path = "E:\\02.PhotoData\\haixin_U-tube\\Laboratory_sampling\\20220223\\lu-split"
-        # folder_path = "E:\\02.PhotoData\\haixin_U-tube\\Laboratory_sampling\\20220223\\LU"
-        # weights = ["E:\\progectlocation\\01.algorithm\\python_tool\\split_img_from_labelimg_yolo_type\\weights\\haixin-utube-distanceMeasure-bukabian-GPU-1024-20220217.pt"]
-        weights = sys.argv[1]
-        folder_path = sys.argv[2]
-        result_path = sys.argv[3]
-        if not os.path.exists(result_path):
-            os.mkdir(result_path)
-        imgs_path = get_imgs_path(folder_path)
-        print(imgs_path)
-        for img_path in imgs_path:
-            name_list, pred_images, boxes = detect(weights=weights[0], images=img_path)
-
-            # float -> int
-            int_boxes = boxes[name_list[0]].astype(int)
-            #  按照x_0坐标位置进行排序
-            int_boxes = int_boxes[np.lexsort(int_boxes[:, ::-1].T)]
-
-            img = cv2.imread(img_path)
-
-            # 遍历坐标进行切图
-            i = len(int_boxes)
-            # # 判断检测数量是否为16个U管腿部或者8个U管顶部
-            # if i != 16 or i != 8:
-            #     print("*"*20)
-            #     print("目标检测异常！")
-            #     print(f"检测到的目标数量为：{i}")
-            #     print("*"*20)
-            for coordinate in int_boxes:
-                x_0, y_0, x_1, y_1 = coordinate[0], coordinate[1], coordinate[2], coordinate[3]
-                img_save_path = result_path +  f"\\\\{i}{name_list[0]}"
-                print(img_save_path)
-                cv2.imwrite(img_save_path, img[y_0:y_1, x_0:x_1, :])
-                i -= 1
+    t1 = time.time()
+    main()
+    t2 = time.time()
+    print(f"time: {t2 - t1}")

@@ -67,19 +67,19 @@ def move2file(path_list, target_file_path, split_all):
         img = cv2.imread(path)
         move_path = target_file_path
         # 筛选裁剪的图片和未裁剪的图片
-        # if img.shape[0] < 2000:
+        if img.shape[0] < 2000:
 
-        # if path.__contains__("cut_img"):
-        #
-        #     # 按照文件夹名称创建文件夹并进行分类
-        #     name_list = ["ceju_img", "duibi_img", "luowen_huajian_img", "suokou_img", "hanjie_img", \
-        #                  "chicun_img", "hanjie_img", "huajian_img", "yamaokahuang_img"]
-        #     for name in name_list:
-        #         if path.__contains__(name):
-        #             move_path = os.path.join(target_file_path, name)
-        #             break
-        # else:
-        #     move_path = os.path.join(target_file_path, "original_image")
+            if path.__contains__("cut_img"):
+
+                # 按照文件夹名称创建文件夹并进行分类
+                name_list = ["ceju_img", "duibi_img", "luowen_huajian_img", "suokou_img", "hanjie_img", \
+                             "chicun_img", "hanjie_img", "huajian_img", "yamaokahuang_img"]
+                for name in name_list:
+                    if path.__contains__(name):
+                        move_path = os.path.join(target_file_path, name)
+                        break
+            else:
+                move_path = os.path.join(target_file_path, "original_image")
 
         # 筛选图片
         # ********************************************************************************
@@ -107,14 +107,15 @@ def move2file(path_list, target_file_path, split_all):
         #     else:
         #         continue
         # ********************************************************************************
-        # 只筛选花键
-        # 即东项目二号台为小相机拍摄，图片为2448*2048 且命名为 0.jpg
-        print("inside line 87 ")
-        if path.__contains__("0.jpg") and not path.__contains__("cut_img"):
-            print(path)
-            move_path = target_file_path
-        else:
-            continue
+        # # 只筛选花键
+        # # 即东项目二号台为小相机拍摄，图片为2448*2048 且命名为 0.jpg
+        # print("inside line 87 ")
+        # if path.__contains__("0.jpg") and not path.__contains__("cut_img"):
+        #     print(path)
+        #     move_path = target_file_path
+        # else:
+        #     continue
+        # # *******************************************************************************
 
         if not os.path.exists(move_path):
             os.mkdir(move_path)
