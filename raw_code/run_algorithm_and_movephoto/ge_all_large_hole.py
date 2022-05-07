@@ -6,7 +6,7 @@ Created on 2021-10-4
 """
 import os
 import subprocess
-import main
+
 import time
 import shutil
 import cv2
@@ -34,7 +34,7 @@ def get_file_contents(dir_name, pathList):
 '''
 
 
-def synthetic_run_command(language, func_name, second_arg = None, img_folder_list):
+def synthetic_run_command(language, func_name, img_folder_list,second_arg = None, ):
     run_command = []
     for folder_path in img_folder_list:
         l = []
@@ -91,7 +91,7 @@ def run_algorithm(dir_path, folder_path, target_path, language, func_name, secon
     # 获取所有放图片的文件夹的路径
     part_path = get_file_contents(dir_path, part_path)
     # 组装所有可执行语句
-    run_command = synthetic_run_command(language, func_name, second_arg, part_path)
+    run_command = synthetic_run_command(language, func_name,part_path, second_arg )
 
     for run in run_command:
         print("run info is :" + str(run))

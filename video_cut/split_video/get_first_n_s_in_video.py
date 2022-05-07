@@ -63,8 +63,9 @@ def get_first_sec_in_video(video_folder,save_folder):
 
 if __name__ == '__main__':
     #
-    video_folder = "F:\\1.znzz\\03.OldMan_Care\\01.datasets\\datasets\\getUp"
-    save_folder = video_folder + "_sit"
+    # video_folder = "F:\\1.znzz\\03.OldMan_Care\\01.datasets\\datasets\\getUp"
+    video_folder ="E:\\video\\test"
+    save_folder = video_folder + "_split"
     video_path_list = os.listdir(video_folder)
     if not os.path.exists(save_folder):
         os.mkdir(save_folder)
